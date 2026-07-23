@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Ashes of Vaelmoor</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="A kingdom-conquest speedrun. Seeded races, high-stakes choices, and a throne that's still burning.">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root{
+  --bg:#15110f;
+  --bg-deep:#0f0c0a;
+  --panel:#221c18;
+  --panel-light:#2b231e;
+  --border:#473a30;
+  --text:#ddd0bc;
+  --text-dim:#9a8a76;
+  --ember:#cf5b2e;
+  --ember-glow:rgba(207,91,46,0.35);
+  --gold:#c79a47;
+  --blood:#8a3232;
+  --corrupt:#7a4ea3;
+  --corrupt-deep:#3a2150;
+  --parchment:#e8dcc0;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0; background:var(--bg); color:var(--text);
+  font-family:'EB Garamond', serif; font-size:17px; line-height:1.6;
+}
+*{scrollbar-width:thin; scrollbar-color:var(--border) transparent;}
+.mono{font-family:'JetBrains Mono', monospace;}
+a{color:var(--gold); text-decoration:none;}
+a:hover{color:var(--ember);}
+h1,h2,h3{font-family:'Cinzel', serif; font-weight:600; letter-spacing:0.04em; margin:0;}
+.wrap{max-width:980px; margin:0 auto; padding:0 24px;}
+.eyebrow{
+  font-family:'JetBrains Mono', monospace; font-size:12px; letter-spacing:0.25em;
+  text-transform:uppercase; color:var(--corrupt); margin-bottom:10px; display:block;
+}
+
+/* ---------- Hero ---------- */
+.hero{
+  position:relative; overflow:hidden; padding:100px 0 80px;
+  background:
+    radial-gradient(ellipse 900px 500px at 50% -10%, var(--ember-glow), transparent 65%),
+    linear-gradient(var(--bg-deep), var(--bg));
+  border-bottom:1px solid var(--border);
+  text-align:center;
+}
+.hero-title{
+  font-size:clamp(38px,7vw,68px); letter-spacing:0.06em;
+  background:linear-gradient(90deg, var(--corrupt-deep), var(--ember), var(--gold), var(--ember), var(--corrupt-deep));
+  background-size:300% 100%;
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  animation:shimmer 9s linear infinite;
+}
+@keyframes shimmer{ 0%{background-position:0% 50%;} 100%{background-position:300% 50%;} }
+.hero-sub{
+  margin:18px auto 0; max-width:620px; font-size:19px; font-style:italic; color:var(--text-dim);
+}
+.corruption-rule{
+  width:min(90%, 460px); height:3px; margin:34px auto; border-radius:2px;
+  background:linear-gradient(90deg, var(--corrupt-deep), var(--corrupt), var(--ember), var(--gold));
+  background-size:200% 100%;
+  animation:shimmer 6s linear infinite;
+}
+.hero-ctas{display:flex; gap:14px; justify-content:center; flex-wrap:wrap; margin-top:8px;}
+.btn{
+  font-family:'Cinzel', serif; font-size:14px; letter-spacing:0.08em; text-transform:uppercase;
+  padding:13px 26px; cursor:pointer; display:inline-block;
+  clip-path:polygon(0 8px,8px 0,calc(100% - 8px) 0,100% 8px,100% calc(100% - 8px),calc(100% - 8px) 100%,8px 100%,0 calc(100% - 8px));
+  transition:border-color .15s, color .15s, transform .1s;
+  border:1px solid var(--border);
+}
+.btn:active{transform:scale(0.98);}
+.btn-primary{background:var(--ember); color:#160f0b; border-color:var(--ember);}
+.btn-primary:hover{background:#e06a3a; color:#160f0b;}
+.btn-secondary{background:var(--panel-light); color:var(--text);}
+.btn-secondary:hover{border-color:var(--gold); color:var(--gold);}
+
+/* ---------- Section shell ---------- */
+section{padding:70px 0; border-bottom:1px solid var(--border);}
+section:last-of-type{border-bottom:none;}
+.section-head{max-width:640px; margin:0 auto 40px; text-align:center;}
+.section-head h2{font-size:clamp(24px,3.6vw,32px);}
+.section-head p{color:var(--text-dim); margin-top:10px;}
+
+/* ---------- Pillars ---------- */
+.pillars{display:grid; grid-template-columns:repeat(3,1fr); gap:20px;}
+.pillar{
+  background:var(--panel); border:1px solid var(--border); padding:26px 22px;
+  clip-path:polygon(0 10px,10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px));
+}
+.pillar-mark{font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--corrupt); letter-spacing:0.15em;}
+.pillar h3{font-size:18px; color:var(--gold); margin:10px 0 10px;}
+.pillar p{color:var(--text-dim); font-size:15px; margin:0;}
+
+/* ---------- Trailer ---------- */
+.trailer-frame{
+  position:relative; width:100%; aspect-ratio:16/9; background:#000;
+  border:1px solid var(--border); overflow:hidden;
+}
+.trailer-frame iframe{width:100%; height:100%; border:0; display:block;}
+.trailer-note{text-align:center; color:var(--text-dim); font-size:13.5px; margin-top:14px; font-style:italic;}
+
+/* ---------- Categories ---------- */
+.categories{display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px;}
+.category{
+  background:var(--panel); border:1px solid var(--border); padding:18px 20px;
+}
+.category .name{font-family:'Cinzel', serif; color:var(--parchment); font-size:15px; letter-spacing:0.05em;}
+.category .desc{color:var(--text-dim); font-size:14px; margin-top:6px;}
+
+/* ---------- Chronicle / devlog ---------- */
+.chronicle{max-width:720px; margin:0 auto;}
+.entry{
+  padding:16px 18px; margin-bottom:12px; background:var(--panel-light); border-left:3px solid var(--corrupt);
+  clip-path:polygon(0 5px,5px 0,calc(100% - 5px) 0,100% 5px,100% calc(100% - 5px),calc(100% - 5px) 100%,5px 100%,0 calc(100% - 5px));
+}
+.entry .tag-row{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:6px; flex-wrap:wrap; gap:8px;}
+.entry .version{font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--gold); letter-spacing:0.08em;}
+.entry .date{font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--text-dim);}
+.entry h4{margin:0 0 4px; font-size:16px; color:var(--parchment); font-family:'EB Garamond', serif; font-weight:600;}
+.entry p{margin:0; color:var(--text-dim); font-size:14.5px;}
+
+/* ---------- Footer / links ---------- */
+footer{padding:50px 0 60px; text-align:center;}
+.footer-links{display:flex; gap:26px; justify-content:center; flex-wrap:wrap; margin-bottom:14px;}
+.footer-link{
+  font-family:'JetBrains Mono', monospace; font-size:13px; letter-spacing:0.06em;
+  color:var(--text-dim); border:1px solid var(--border); padding:9px 16px;
+}
+.footer-link:hover{color:var(--gold); border-color:var(--gold);}
+footer .fine{color:var(--text-dim); font-size:12.5px; font-style:italic;}
+
+@media (max-width:720px){
+  .pillars{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Ten Years Since the Hollowing</span>
+    <h1 class="hero-title">Ashes of Vaelmoor</h1>
+    <p class="hero-sub">A kingdom-conquest speedrun. Six warring provinces, a court that will judge every choice you make, and a throne that hasn't stopped burning in a decade.</p>
+    <div class="corruption-rule"></div>
+    <div class="hero-ctas">
+      <a class="btn btn-primary" href="https://r00ster148.github.io/ashesofvaelmoor.github.io/" target="_blank" rel="noopener noreferrer">Play Now</a>
+      <a class="btn btn-secondary" href="#trailer">Watch the Trailer</a>
+      <a class="btn btn-secondary" href="https://discord.gg/teVYtQAMBE" target="_blank" rel="noopener noreferrer">Join the Discord</a>
+    </div>
+  </div>
+</section>
+
+<section id="features">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">What's In the Reign</span>
+      <h2>Built to be raced, not just played</h2>
+      <p>Every system below exists because a real Death% run turned into a click-speed contest. It doesn't anymore.</p>
+    </div>
+    <div class="pillars">
+      <div class="pillar">
+        <span class="pillar-mark">01 — FAIRNESS</span>
+        <h3>Seeded Races</h3>
+        <p>Every roll in the game — event order, combat, drops — runs off one seed. Share a seed and race someone on the exact same board. No more losing to bad luck instead of a bad plan.</p>
+      </div>
+      <div class="pillar">
+        <span class="pillar-mark">02 — STAKES</span>
+        <h3>Choices That Can Cost You</h3>
+        <p>A handful of the realm's most tempting offers are gambles now. The reward is real. So is the chance it backfires — a companion's trust gone for good, an army gutted, a kingdom's faith in you cracked open.</p>
+      </div>
+      <div class="pillar">
+        <span class="pillar-mark">03 — COMMITMENT</span>
+        <h3>The All-In Charge</h3>
+        <p>March with half your army, or throw in nearly all of it for a much harder hit. Win, and it's the fastest conquest in the run. Lose, and there may not be an army left to march home.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="trailer">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">See It Burn</span>
+      <h2>The Trailer</h2>
+    </div>
+    <div class="trailer-frame">
+      <iframe src="./trailer.html" title="Ashes of Vaelmoor trailer" loading="lazy"></iframe>
+    </div>
+    <p class="trailer-note">Plays once from the top — refresh the frame to watch it again.</p>
+  </div>
+</section>
+
+<section id="categories">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Speedrun.com</span>
+      <h2>Categories worth racing</h2>
+      <p>Seeded runs make all of these directly comparable now — same board, same events, same drops.</p>
+    </div>
+    <div class="categories">
+      <div class="category">
+        <div class="name mono">Any%</div>
+        <div class="desc">Fastest reach of any ending. The classic race.</div>
+      </div>
+      <div class="category">
+        <div class="name mono">Death%</div>
+        <div class="desc">Fastest route to any defeat ending. Now a routing problem, not a click-speed contest.</div>
+      </div>
+      <div class="category">
+        <div class="name mono">Low%</div>
+        <div class="desc">Reach the Dawn ending with the fewest provinces conquered.</div>
+      </div>
+      <div class="category">
+        <div class="name mono">Pacifist</div>
+        <div class="desc">No marches. Parley or nothing.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="chronicle">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">The Chronicle</span>
+      <h2>Latest updates</h2>
+      <p>What's changed in the realm, most recent first.</p>
+    </div>
+    <div class="chronicle" id="chronicleList"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-links">
+      <a class="footer-link" href="https://discord.gg/teVYtQAMBE" target="_blank" rel="noopener noreferrer">Discord</a>
+      <a class="footer-link" href="https://github.com/R00ster148/Ashes-of-Vaelmoor" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a class="footer-link" href="https://www.speedrun.com/Ashes_of_Vaelmoor" target="_blank" rel="noopener noreferrer">Speedrun.com Leaderboards</a>
+    </div>
+    <p class="fine">Ashes of Vaelmoor is a free, single-file browser game. No install, no account — just a throne and a bad decision waiting to happen.</p>
+  </div>
+</footer>
+
+<script>
+/* ---------- Devlog / Chronicle entries ----------
+   Add new updates to the TOP of this array — newest first. That's the only
+   edit needed to post an update; the rest of the page renders itself.
+   version: short tag shown in gold, e.g. "v0.19" or "Update 3"
+   date:    whatever format you like, it's just displayed as-is
+   title:   short headline
+   body:    1-3 sentences
+------------------------------------------------------------------------- */
+const UPDATES = [
+  {
+    version: "v0.19",
+    date: "2026-07-23",
+    title: "Seeded races and the All-In Charge",
+    body: "Every random roll in the game now runs off a shareable seed, so races are finally fair. Nine of the realm's most tempting choices are real gambles now, and marching can be committed all-in for a much harder hit — and a much worse loss."
+  },
+  {
+    version: "v0.18",
+    date: "—",
+    title: "Stable baseline",
+    body: "The version this hub was built around: full territory conquest, companion trust, the Butterfly Log, and the original Call the Charge timing mechanic."
+  }
+];
+
+const list = document.getElementById('chronicleList');
+list.innerHTML = UPDATES.map(u => `
+  <div class="entry">
+    <div class="tag-row">
+      <span class="version mono">${u.version}</span>
+      <span class="date mono">${u.date}</span>
+    </div>
+    <h4>${u.title}</h4>
+    <p>${u.body}</p>
+  </div>
+`).join('');
+</script>
+
+</body>
+</html>
